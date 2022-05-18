@@ -3,53 +3,52 @@ namespace Encapsulation.Models
 {
     public class WeatherReporter
     {
-        public string Location;
-        public double Temperature;
+        private string _location;
+        private double _temperature;
+        // Referred: https://physics.stackexchange.com/questions/86726/celsius-to-fahrenheit-confusion-why-there-is-no-1-to-x-ratio
+        private const double  SLOPE_DIFFERENCE = 9.0/5.0;
+        private const int ZERO_DIFFERENCE = 32;
 
         public WeatherReporter(string location, double temperature)
         {
-            Location = location;
-            Temperature = temperature;
+            _location = location;
+            _temperature = temperature;
+        }
+
+        private Dictionary<String, String> fetchWeatherConditions(){
+            Dictionary<String, String> weatheConditonsByLocation = new Dictionary<string,string>();
+            weatheConditonsByLocation["London"] = "🌦";
+            weatheConditonsByLocation["California"] = "🌅";
+            weatheConditonsByLocation["Cape Town"] = "🌤";
+            return weatheConditonsByLocation;
+        }
+
+        private double getTemperatureInFahrenheit(){
+            return SLOPE_DIFFERENCE * _temperature + ZERO_DIFFERENCE;
         }
 
         public string Print()
         {
-            double newTemp = (9.0 / 5.0) * Temperature + 32;
-            return $"I am in {Location} and it is {Check1()}. {Check2()}. The temperature in Fahrenheit is {newTemp}.";
+            double newTemp = getTemperatureInFahrenheit();
+            return $"I am in {_location} and it is {CheckLocation()}. {CheckTemperature()}. The temperature in Fahrenheit is {newTemp}.";
         }
 
-        public string Check1()
+        public string CheckLocation()
         {
-            if (Location == "London")
-            {
-
-                return "🌦";
-
-            }
-            else if (Location == "California")
-            {
-
-                return "🌅";
-
-            }
-            else if (Location == "Cape Town")
-            {
-
-                return "🌤";
-
-            }
-            return "🔆";
+            // Ideally fetched from API
+            string weather = fetchWeatherConditions()[_location];
+            return (String.IsNullOrEmpty(weather))?"🔆":weather;
         }
 
-        public string Check2()
+        public string CheckTemperature()
         {
-            if (Temperature > 30)
+            if (_temperature > 30)
             {
 
                 return "It's too hot 🥵!";
 
             }
-            else if (Temperature < 10)
+            else if (_temperature < 10)
             {
 
                 return "It's too cold 🥶!";
