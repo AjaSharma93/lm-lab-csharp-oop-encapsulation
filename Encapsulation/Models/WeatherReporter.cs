@@ -7,7 +7,7 @@ namespace Encapsulation.Models
         private double _temperature;
         // Referred: https://physics.stackexchange.com/questions/86726/celsius-to-fahrenheit-confusion-why-there-is-no-1-to-x-ratio
         private const double  SLOPE_DIFFERENCE = 9.0/5.0;
-        private const int ZERO_DIFFERENCE = 32;
+        private const double ZERO_DIFFERENCE = 32;
 
         public WeatherReporter(string location, double temperature)
         {
@@ -17,9 +17,9 @@ namespace Encapsulation.Models
 
         private Dictionary<String, String> fetchWeatherConditions(){
             Dictionary<String, String> weatheConditonsByLocation = new Dictionary<string,string>();
-            weatheConditonsByLocation["London"] = "🌦";
-            weatheConditonsByLocation["California"] = "🌅";
-            weatheConditonsByLocation["Cape Town"] = "🌤";
+            weatheConditonsByLocation["london"] = "🌦";
+            weatheConditonsByLocation["california"] = "🌅";
+            weatheConditonsByLocation["cape town"] = "🌤";
             return weatheConditonsByLocation;
         }
 
@@ -36,7 +36,8 @@ namespace Encapsulation.Models
         public string CheckLocation()
         {
             // Ideally fetched from API
-            string weather = fetchWeatherConditions()[_location];
+            string weather; 
+            fetchWeatherConditions().TryGetValue(_location, out weather);
             return (String.IsNullOrEmpty(weather))?"🔆":weather;
         }
 
